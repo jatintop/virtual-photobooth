@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Background Changer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-image: url('webbg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin: 0;
+      padding-top: 80px;
+      color: #333;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 10px 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: rgba(255, 255, 255, 0.862);
+      z-index: 1000;
+    }
+
+    .header img {
+      height: 50px;
+      filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+    }
+
+    .welcome {
+      font-size: 32px;
+      font-weight: bold;
+      margin-top: 0px;
+      color: #000;
+    }
+
+    .upload-container {
+      background-color: #e0e0e0;
+      border: 2px solid #d1d1d1;
+      border-radius: 20px;
+      padding: 25px;
+      margin-top: 20px;
+      height: 140px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .upload-button {
+      background-color: #646464;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 20px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .upload-button i {
+      margin-right: 8px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 30px 0 15px;
+      text-align: left;
+      width: 90%;
+      max-width: 400px;
+      color: #000;
+    }
+
+    .background-options,
+    .popular-options {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      width: 90%;
+      max-width: 400px;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    .background-option,
+    .popular-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 200px; /* Adjust width for items */
+    }
+
+    .background-option img,
+    .popular-option img {
+      width: 100%;
+      height: 150px;
+      border-radius: 12px 12px 0 0;
+      object-fit: cover;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 3px solid #eeeeee;
+      border-bottom: none;
+    }
+
+    .background-option img:hover,
+    .popular-option img:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .try-button {
+      width: 100px;
+      height: 45px;
+      background-color: #293A4E;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 0 0 12px 12px;
+      padding: 8px 0;
+      cursor: pointer;
+      text-align: center;
+      margin-top: 0px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s;
+      border: 3px solid #eeeeee;
+      border-top: none;
+    }
+
+    .try-button:hover {
+      background-color: #1d2a3a;
+    }
+
+    footer {
+      background-color: #293A4E;
+      height: 80px;
+      margin-top: 35px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 16px;
+    }
+
+    @media (max-width: 600px) {
+      .header img {
+        height: 40px;
+      }
+
+      .welcome {
+        font-size: 28px;
+      }
+
+      .background-option,
+      .popular-option {
+        width: 180px; /* Adjust for mobile */
+      }
+
+      .section-title {
+        font-size: 20px;
+      }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+</head>
+<body>
+<!-- Header Section -->
+  <div class="container">
+    <div class="header">
+      <img src="cu1.png" alt="CHRIST University">
+      <img src="daksh.png" alt="Daksh">
+    </div>
+
+<!-- Welcome Message -->
+    <div class="welcome">Welcome</div>
+
+<!-- Upload Container -->
+<div class="upload-container">
+  <form id="upload-form">
+    <!-- Hidden file input -->
+    <input type="file" id="image" name="image" accept="image/*" required style="display:none;" onchange="handleFileUpload()">
+    
+    <!-- Custom upload button -->
+    <button class="upload-button" type="button" onclick="document.getElementById('image').click();" id="upload-btn">
+      <i class="fas fa-upload"></i> Upload
+    </button>
+  </form>
+</div>
+
+
+
+<!-- Background Options Section -->
+    <div class="section-title">Backgrounds</div>
+    <div class="background-options">
+      <div class="background-option">
+        <img src="backgrounds/bg1.jpg" alt="Background 1">
+        <button class="try-button">Try</button>
+      </div>
+      <div class="background-option">
+        <img src="backgrounds/bg2.jpeg" alt="Background 2">
+        <button class="try-button">Try</button>
+      </div>
+      <div class="background-option">
+        <img src="backgrounds/bg3.jpg" alt="Background 3">
+        <button class="try-button">Try</button>
+      </div>
+      <!-- Repeat images for scrolling effect -->
+      <div class="background-option">
+        <img src="backgrounds/bg1.jpg" alt="Background 1">
+        <button class="try-button">Try</button>
+      </div>
+      <div class="background-option">
+        <img src="backgrounds/bg2.jpeg" alt="Background 2">
+        <button class="try-button">Try</button>
+      </div>
+      <div class="background-option">
+        <img src="backgrounds/bg3.jpg" alt="Background 3">
+        <button class="try-button">Try</button>
+      </div>
+    </div>
+            <!-- Scroll for More Text -->
+  <div class="scroll-more">
+    <span>Scroll for More</span>
+    <i class="fas fa-arrow-right"></i>
+  </div>
+
+<!-- Popular Backgrounds Section -->
+    <div class="section-title">Popular</div>
+    <div class="popular-options">
+      <div class="popular-option">
+        <img src="backgrounds/bg4.jpg" alt="Background 4">
+        <button class="try-button">Try</button>
+      </div>
+      <div class="popular-option">
+        <img src="backgrounds/bg5.jpg" alt="Background 5">
+        <button class="try-button">Try</button>
+      </div>
+      <div class="popular-option">
+        <img src="backgrounds/bg6.jpeg" alt="Background 6">
+        <button class="try-button">Try</button>
+      </div>
+      <!-- Repeat images for scrolling effect -->
+      <div class="popular-option">
+        <img src="backgrounds/bg4.jpg" alt="Background 4">
+        <button class="try-button">Try</button>
+      </div>
+      <div class="popular-option">
+        <img src="backgrounds/bg5.jpg" alt="Background 5">
+        <button class="try-button">Try</button>
+      </div>
+      <div class="popular-option">
+        <img src="backgrounds/bg6.jpeg" alt="Background 6">
+        <button class="try-button">Try</button>
+      </div>
+    </div>
+      <!-- Scroll for More Text -->
+  <div class="scroll-more">
+    <span>Scroll for More</span>
+    <i class="fas fa-arrow-right"></i>
+  </div>
+  </div>
+
+  <footer>
+    &copy; Daksh | Christ University 2024
+  </footer>
+
+  <script>
+      function handleFileUpload() {
+      var fileInput = document.getElementById('image');
+      var uploadButton = document.getElementById('upload-btn');
+      
+      // Check if a file is selected
+      if (fileInput.files && fileInput.files[0]) {
+        // Change button text and make it unclickable
+        uploadButton.innerHTML = '<i class="fas fa-check"></i> Image Uploaded';
+        uploadButton.disabled = true;
+      }
+    }
+
+    document.getElementById('upload-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const fileInput = document.getElementById('image');
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+
+        try {
+            const response = await fetch('/remove-background', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+
+            const blob = await response.blob();
+            const outputImage = document.getElementById('output-image');
+            outputImage.src = URL.createObjectURL(blob);
+            outputImage.style.display = 'block';
+        } catch (error) {
+            alert('Error removing background: ' + error.message);
+        }
+    });
+</script>
+</body>
+</html>
