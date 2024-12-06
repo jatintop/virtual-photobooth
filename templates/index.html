@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Background Changer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        /* General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-image: url('/static/webbg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            padding-top: 80px;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 10px 20px;
+            position: fixed;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 1000;
+        }
+
+        .header img {
+            height: 50px;
+            filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Welcome Text */
+        .welcome {
+            font-size: 32px;
+            font-weight: bold;
+            color: #000;
+            margin: 20px 0;
+        }
+
+        /* Upload Section */
+        .upload-container {
+            background-color: #e0e0e0;
+            border: 2px solid #d1d1d1;
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 20px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .upload-button {
+            background-color: white;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .upload-button:hover {
+            background-color: #4c4c4c;
+        }
+
+        /* File Input Styling */
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-custom {
+            background-color: #646464;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 24px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-custom:hover {
+            background-color: #4c4c4c;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #333;
+            text-align: center;
+            word-break: break-all;
+        }
+
+        /* Background Options */
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 30px 0 15px;
+            color: #000;
+        }
+
+        .background-options,
+        .popular-options {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            max-width: 90%;
+            padding-bottom: 10px;
+        }
+
+        .background-option img {
+            width: 200px;
+            height: 150px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .background-option img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .try-button {
+            width: 100%;
+            height: 45px;
+            background-color: #293A4E;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .try-button:hover {
+            background-color: #1d2a3a;
+        }
+
+        /* Output Section */
+        .image-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .output-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #293A4E;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 16px;
+            margin-top: 30px;
+        }
+
+        /* Loader */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #293A4E;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            display: none;
+            margin: 20px auto;
+        }
+
+        #replace-bg-button {
+            margin-top: 40px;
+            width: 90%;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <img src="/static/cu1.png" alt="CHRIST University">
+        <img src="/static/daksh.png" alt="Daksh">
+    </div>
+
+    <div class="container">
+        <!-- Welcome -->
+        <div class="welcome">Welcome</div>
+
+        <!-- Upload Form -->
+        <form class="upload-container" id="upload-form">
+            <div class="file-input-wrapper">
+                <input type="file" id="image" name="image" accept="image/*" required>
+                <label for="image" class="file-input-custom">Choose Image</label>
+            </div>
+            <div class="file-name">No file chosen</div>
+        </form>
+
+        <!-- Background Options -->
+        <div class="section-title">Backgrounds</div>
+        <div class="background-options">
+            <div class="background-option">
+                <img src="/static/Backgrounds/bg1.jpg" alt="Background 1">
+                <button class="try-button">Try</button>
+            </div>
+            <div class="background-option">
+                <img src="/static/Backgrounds/bg2.jpg" alt="Background 2">
+                <button class="try-button">Try</button>
+            </div>
+            <div class="background-option">
+                <img src="/static/Backgrounds/bg3.jpg" alt="Background 3">
+                <button class="try-button">Try</button>
+            </div>
+        </div>
+
+        <!-- Replace Background Button -->
+        <button id="replace-bg-button" class="upload-button" disabled>Replace Background</button>
+
+        <!-- Output Image -->
+        <div class="image-container" id="output-container">
+            <div class="loader" id="loader"></div>
+        </div>
+    </div>
+
+    <footer>&copy; Daksh | Christ University 2024</footer>
+
+    <script>
+        let selectedBackground = null;
+        let imageUploaded = false;
+
+        // Enable Replace Background button if both conditions are met
+        function checkConditions() {
+            const replaceBgButton = document.getElementById('replace-bg-button');
+            if (selectedBackground && imageUploaded) {
+                replaceBgButton.disabled = false;
+            } else {
+                replaceBgButton.disabled = true;
+            }
+        }
+
+        // Handle background selection
+        document.querySelectorAll('.try-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Reset all buttons to "Try"
+                document.querySelectorAll('.try-button').forEach(btn => btn.textContent = 'Try');
+
+                // Update clicked button to "Selected"
+                button.textContent = 'Selected';
+
+                // Set selected background
+                selectedBackground = button.previousElementSibling.src;
+                checkConditions(); // Check if both conditions are met
+            });
+        });
+
+
+        // Handle file input
+        document.getElementById('image').addEventListener('change', (e) => {
+            imageUploaded = !!e.target.files[0];
+            checkConditions();
+        });
+
+        // Handle file input and display file name
+        document.getElementById('image').addEventListener('change', (e) => {
+            const fileNameDisplay = document.querySelector('.file-name');
+            const file = e.target.files[0];
+            if (file) {
+                fileNameDisplay.textContent = file.name; 
+                imageUploaded = true; 
+            } else {
+                fileNameDisplay.textContent = 'No file chosen'; 
+                imageUploaded = false;
+            }
+            checkConditions(); 
+        });
+
+        // Handle Replace Background button click
+        document.getElementById('replace-bg-button').addEventListener('click', async () => {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
+
+            const fileInput = document.getElementById('image');
+            if (!fileInput.files[0]) {
+                loader.style.display = 'none';
+                return alert("Please upload an image first!");
+            }
+
+            if (!selectedBackground) {
+                loader.style.display = 'none';
+                return alert("Please select a background first!");
+            }
+
+            const formData = new FormData();
+            formData.append('image', fileInput.files[0]);
+            formData.append('background', selectedBackground);
+
+            try {
+                const response = await fetch('/remove-background', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) throw new Error("Image processing failed!");
+
+                const blob = await response.blob();
+                const img = new Image();
+                const output = document.getElementById('output-container');
+                img.src = URL.createObjectURL(blob);
+
+                img.onload = () => {
+                    loader.style.display = 'none';
+                    output.innerHTML = ''; 
+                    output.appendChild(img); 
+                    img.classList.add('output-image');
+
+                    // Create and append the download button
+                    const downloadButton = document.createElement('button');
+                    downloadButton.textContent = 'Download Image';
+                    downloadButton.className = 'upload-button'; 
+                    downloadButton.style.marginTop = '20px';
+
+                    downloadButton.addEventListener('click', () => {
+                        const link = document.createElement('a');
+                        link.href = img.src;
+                        link.download = 'processed-image.png';
+                        link.click();
+                    });
+
+                    output.appendChild(downloadButton);
+                };
+            } catch (error) {
+                loader.style.display = 'none';
+                alert(error.message);
+            }
+        });
+
+    </script>
+</body>
+</html>
